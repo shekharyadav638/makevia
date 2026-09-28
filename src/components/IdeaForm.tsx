@@ -72,7 +72,7 @@ export function IdeaForm() {
         )}
       </div>
 
-      <div className="mt-4 flex flex-wrap gap-2">
+      <div className="mt-4 flex flex-wrap justify-center gap-2">
         <span className="py-1.5 text-sm text-muted">Try:</span>
         {examples.map((ex) => (
           <button

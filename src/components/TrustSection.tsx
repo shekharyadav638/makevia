@@ -12,7 +12,7 @@ export function TrustSection() {
     <section id="about" aria-labelledby="trust-title" className="bg-ink py-24 text-paper md:py-32">
       <div className="wrap">
         <div className="reveal">
-          <SectionHeading id="trust-title" eyebrow="What we're building" title="Relevant. Verified. Useful." tone="dark">
+          <SectionHeading id="trust-title" eyebrow="Our approach" title="Relevant. Verified. Useful." tone="dark">
             Makevia isn&rsquo;t designed to overwhelm you with thousands of random listings. Our goal is to surface providers and requirements that are relevant to what you&rsquo;re actually trying to build.
           </SectionHeading>
         </div>

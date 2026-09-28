@@ -45,16 +45,9 @@ export type Provider = {
   description: string | null;
   website: string | null;
   verified: boolean;
+  published: boolean;
+  source: string;
 };
 
 export const IDEA_MIN = 3;
 export const IDEA_MAX = 300;
-
-export function groupProviders(providers: Provider[], perService = 3): Partial<Record<Service, Provider[]>> {
-  const groups: Partial<Record<Service, Provider[]>> = {};
-  for (const p of providers) {
-    const list = (groups[p.service] ??= []);
-    if (list.length < perService) list.push(p);
-  }
-  return groups;
-}

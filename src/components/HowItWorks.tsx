@@ -20,7 +20,7 @@ const steps = [
 
 export function HowItWorks() {
   return (
-    <section id="how-it-works" aria-labelledby="how-title" className="py-24 md:py-32">
+    <section id="how-it-works" aria-labelledby="how-title" className="border-t border-line py-24 md:py-32">
       <div className="wrap">
         <div className="reveal">
           <SectionHeading id="how-title" eyebrow="How it works" title="You bring the idea. Makevia helps you figure out how to build it." />

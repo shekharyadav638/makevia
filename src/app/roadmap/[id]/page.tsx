@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, BadgeCheck, Clock, ExternalLink, IndianRupee, MapPin } from "lucide-react";
+import { ArrowLeft, BadgeCheck, Clock, ExternalLink, IndianRupee, MapPin, Search } from "lucide-react";
 import { AppHeader } from "@/components/AppHeader";
+import { Footer } from "@/components/Footer";
 import { MatchRequestForm } from "@/components/MatchRequestForm";
 import { db } from "@/lib/supabase";
-import { CATEGORIES, groupProviders, SERVICES, type Provider, type Roadmap, type Service } from "@/lib/roadmap";
+import { CATEGORIES, SERVICES, type Provider, type Roadmap, type Service } from "@/lib/roadmap";
 
 export const metadata: Metadata = {
   title: "Your product roadmap — Makevia",
@@ -16,16 +17,23 @@ const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
 
 type IdeaRow = { id: string; idea: string; category: keyof typeof CATEGORIES; roadmap: Roadmap };
 
-async function loadProviders(services: Service[], category: string): Promise<Provider[]> {
-  if (!services.length) return [];
-  const query = new URLSearchParams({
-    select: "id,name,service,city,state,description,website,verified",
-    published: "eq.true",
-    service: `in.(${services.join(",")})`,
-    or: `(categories.cs.{${category}},categories.eq.{})`,
-    order: "verified.desc,name.asc",
-  });
-  return (await db(`providers?${query}`)).json();
+const PER_STEP = 3;
+
+async function loadProviders(services: Service[], category: string): Promise<Partial<Record<Service, Provider[]>>> {
+  const lists = await Promise.all(
+    services.map(async (service) => {
+      const query = new URLSearchParams({
+        select: "id,name,service,city,state,description,website,verified,published,source",
+        service: `eq.${service}`,
+        or: `(categories.cs.{${category}},categories.eq.{})`,
+        and: "(or(published.eq.true,source.eq.mca))",
+        order: "published.desc,verified.desc,id.desc",
+        limit: String(PER_STEP),
+      });
+      return [service, await (await db(`providers?${query}`)).json()] as const;
+    }),
+  );
+  return Object.fromEntries(lists);
 }
 
 export default async function RoadmapPage({ params }: PageProps<"/roadmap/[id]">) {
@@ -37,7 +45,8 @@ export default async function RoadmapPage({ params }: PageProps<"/roadmap/[id]">
 
   const { roadmap } = row;
   const services = [...new Set(roadmap.steps.map((s) => s.service))].filter((s): s is Service => s !== "none");
-  const providers = groupProviders(await loadProviders(services, row.category));
+  const providers = await loadProviders(services, row.category);
+  const showsRegistry = Object.values(providers).some((list) => list?.some((p) => !p.published));
 
   return (
     <>
@@ -105,8 +114,13 @@ export default async function RoadmapPage({ params }: PageProps<"/roadmap/[id]">
                           <li key={p.id} className="rounded-xl border border-line bg-paper p-4">
                             <p className="flex items-center gap-1.5 font-medium text-ink">
                               {p.name}
-                              {p.verified && <BadgeCheck className="h-4 w-4 text-accent" aria-label="Verified" />}
+                              {p.published && p.verified && <BadgeCheck className="h-4 w-4 text-accent" aria-label="Verified" />}
                             </p>
+                            {!p.published && (
+                              <p className="mt-1 text-xs font-medium uppercase tracking-wide text-muted">
+                                Registered company &middot; Not yet verified
+                              </p>
+                            )}
                             {(p.city || p.state) && (
                               <p className="mt-1 flex items-center gap-1 text-sm text-muted">
                                 <MapPin className="h-3.5 w-3.5" aria-hidden="true" />
@@ -123,6 +137,17 @@ export default async function RoadmapPage({ params }: PageProps<"/roadmap/[id]">
                               >
                                 Visit website
                                 <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
+                              </a>
+                            )}
+                            {!p.website && (
+                              <a
+                                href={`https://www.google.com/search?q=${encodeURIComponent(`${p.name} ${p.city ?? ""}`)}`}
+                                target="_blank"
+                                rel="noopener noreferrer nofollow"
+                                className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-accent hover:text-accent-strong"
+                              >
+                                Find contact details
+                                <Search className="h-3.5 w-3.5" aria-hidden="true" />
                               </a>
                             )}
                           </li>
@@ -142,6 +167,16 @@ export default async function RoadmapPage({ params }: PageProps<"/roadmap/[id]">
           Costs, timelines and requirements are AI-generated estimates. Confirm them with providers and the relevant
           authorities before you commit.
         </p>
+        {showsRegistry && (
+          <p className="mt-2 text-sm text-muted">
+            Companies marked &ldquo;Not yet verified&rdquo; come from public company records and haven&rsquo;t been checked
+            by Makevia. Company data: Ministry of Corporate Affairs, via{" "}
+            <a href="https://www.data.gov.in/catalog/company-master-data" target="_blank" rel="noopener noreferrer" className="underline hover:text-ink">
+              data.gov.in
+            </a>{" "}
+            (Government Open Data License &ndash; India).
+          </p>
+        )}
 
         <section aria-labelledby="match-title" className="mt-12 rounded-2xl bg-ink p-7 text-paper md:p-9">
           <h2 id="match-title" className="text-2xl font-semibold tracking-tight">
@@ -156,6 +191,7 @@ export default async function RoadmapPage({ params }: PageProps<"/roadmap/[id]">
           </div>
         </section>
       </main>
+      <Footer />
     </>
   );
 }

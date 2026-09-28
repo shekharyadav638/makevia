@@ -17,10 +17,10 @@ export function Categories() {
       <div className="wrap">
         <div className="reveal flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <SectionHeading id="categories-title" eyebrow="Examples" title="Whatever you want to build.">
-            Makevia is being built for entrepreneurs across industries.
+            Makevia works best for physical products in these categories.
           </SectionHeading>
           <p className="max-w-xs text-sm text-muted md:text-right">
-            Categories we&rsquo;re exploring first. They&rsquo;ll open up gradually as we launch.
+            Our provider network starts here and grows one category at a time.
           </p>
         </div>
 
@@ -35,10 +35,10 @@ export function Categories() {
           <li className={`${card} flex flex-col justify-between border-dashed bg-surface hover:border-accent/40`}>
             <p className="text-lg font-semibold tracking-tight">Something else in mind?</p>
             <a
-              href="#waitlist"
+              href="#start"
               className="group mt-8 inline-flex items-center gap-2 self-start rounded font-medium text-accent hover:text-accent-strong focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
             >
-              Tell us what you&rsquo;re building
+              Try it with your idea
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
             </a>
           </li>

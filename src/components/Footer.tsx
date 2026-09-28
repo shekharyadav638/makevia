@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Logo } from "./Logo";
 
 const soon = ["Contact", "Privacy", "Terms"];
@@ -13,9 +14,9 @@ export function Footer() {
         <div className="flex flex-col gap-6 md:items-end">
           <ul className="flex flex-wrap gap-x-7 gap-y-3 text-sm">
             <li>
-              <a href="#about" className="rounded text-ink-soft hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent">
+              <Link href="/#about" className="rounded text-ink-soft hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent">
                 About
-              </a>
+              </Link>
             </li>
             {soon.map((label) => (
               <li key={label} className="text-muted">

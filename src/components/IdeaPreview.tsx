@@ -1,4 +1,4 @@
-import { ArrowUp, Check, Eye } from "lucide-react";
+import { ArrowRight, ArrowUp, Check } from "lucide-react";
 import { LogoMark } from "./Logo";
 import { SectionHeading } from "./SectionHeading";
 
@@ -15,13 +15,16 @@ export function IdeaPreview() {
     <section aria-labelledby="preview-title" className="border-t border-line bg-surface py-24 md:py-32">
       <div className="wrap grid items-center gap-14 lg:grid-cols-[1fr_1.1fr] lg:gap-20">
         <div className="reveal">
-          <SectionHeading id="preview-title" eyebrow="Product preview" title="Start with an idea.">
-            Makevia will identify the steps you actually need and connect you with relevant, verified providers.
+          <SectionHeading id="preview-title" eyebrow="Example roadmap" title="Start with an idea.">
+            Makevia identifies the steps your product actually needs and matches each one with providers who can help.
           </SectionHeading>
-          <p className="mt-8 inline-flex items-center gap-2 rounded-full bg-paper px-3.5 py-2 text-sm text-ink-soft ring-1 ring-line">
-            <Eye className="h-4 w-4 text-accent" aria-hidden="true" />
-            A preview of what we&rsquo;re building. Not live yet.
-          </p>
+          <a
+            href="#start"
+            className="group mt-8 inline-flex items-center gap-2 rounded-full bg-ink px-5 py-3 font-medium text-paper transition-colors hover:bg-ink-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          >
+            Try it with your idea
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+          </a>
         </div>
 
         <figure className="reveal rounded-[1.75rem] border border-line bg-paper p-3 sm:p-4">
@@ -32,7 +35,7 @@ export function IdeaPreview() {
                 Makevia
               </span>
               <span className="rounded-full bg-accent-soft px-2.5 py-1 font-mono text-[0.7rem] uppercase tracking-wider text-accent-strong">
-                Preview
+                Example
               </span>
             </div>
 
