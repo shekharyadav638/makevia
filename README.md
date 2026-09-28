@@ -1,40 +1,43 @@
 # Makevia
 
-Coming-soon landing page for [makevia.in](https://makevia.in). Next.js 16, TypeScript, Tailwind CSS v4, Lucide.
+**From idea to product.**
 
-```bash
-npm install
-npm run dev     # http://localhost:3000
-npm test        # waitlist validation
-npm run build
-```
+Makevia helps Indian founders turn a product idea into a real product. Describe what you want to build, and Makevia maps out everything it needs, from formulation to logistics, then connects you with verified manufacturers and service providers.
 
-## Waitlist
+Launching soon. Join the waitlist at [makevia.in](https://makevia.in).
 
-Entries are stored in Supabase through the server action in `src/app/actions.ts`. Your secret key stays on the server and is never sent to the browser.
+## How it works
 
-1. Create a Supabase project and run this in the SQL editor:
+1. **Tell us your idea.** Describe what you want to build in simple language.
+2. **Get your roadmap.** Makevia identifies the steps, requirements and services your product needs.
+3. **Find the right providers.** Discover relevant, verified manufacturers and service providers, and connect with them directly.
 
-```sql
-create table public.waitlist (
-  id bigint generated always as identity primary key,
-  email text not null unique check (char_length(email) <= 254),
-  idea text check (char_length(idea) <= 200),
-  source text,
-  created_at timestamptz not null default now()
-);
-alter table public.waitlist enable row level security;
-grant insert on public.waitlist to service_role;
-```
+## Coming features
 
-2. Copy `.env.example` to `.env.local` and set `SUPABASE_URL` (Project Settings → Data API) and `SUPABASE_SECRET_KEY` (Project Settings → API Keys: a `sb_secret_…` key, or the legacy `service_role` key). Add the same two variables in Vercel.
+- **Idea-to-roadmap:** turn a one-line idea like *"a protein chips brand"* into a step-by-step product journey.
+- **Product formulation:** find experts to help with recipes, nutrition and shelf life.
+- **Contract manufacturing:** find manufacturers and private label partners that fit your category and scale.
+- **Packaging:** find pouches, bottles, labels and printing partners.
+- **Testing & compliance:** get guidance on FSSAI licensing, lab testing and certifications.
+- **Logistics:** find warehousing and distribution partners to get your product to market.
+- **Verified providers:** we aim to check provider information before recommending anyone.
 
-RLS is on and has no policies, so the public/anon key can't read or write the table. Emails are saved in lowercase, and a repeat signup is silently ignored.
+## Categories at launch
 
-## Brand tokens
+- Food & Beverage: protein snacks, beverages, packaged foods
+- Skincare & Beauty: serums, creams, cosmetics
+- Supplements: protein, vitamins, wellness products
+- Furniture: desks, chairs, custom furniture
+- Consumer Products: bottles, accessories, packaging, household products
 
-Colors live as CSS variables in `src/app/globals.css` and are exposed as Tailwind colors (`ink`, `paper`, `accent`, …).
+Building something else? Tell us on the waitlist.
 
-## Deploy
+## Why Makevia
 
-Import the repo in Vercel and set the two Supabase env vars.
+- **Relevant:** only services and providers that fit your product.
+- **Verified:** we aim to check provider information before recommending it.
+- **Practical:** the information you need to take the next step.
+
+---
+
+© 2026 Makevia. All rights reserved.
