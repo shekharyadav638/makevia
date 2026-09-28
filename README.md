@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Makevia
 
-## Getting Started
-
-First, run the development server:
+Coming-soon landing page for [makevia.in](https://makevia.in). Next.js 16, TypeScript, Tailwind CSS v4, Lucide.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev     # http://localhost:3000
+npm test        # waitlist validation
+npm run build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Waitlist
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Entries are stored in Supabase through the server action in `src/app/actions.ts`. Your secret key stays on the server and is never sent to the browser.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Create a Supabase project and run this in the SQL editor:
 
-## Learn More
+```sql
+create table public.waitlist (
+  id bigint generated always as identity primary key,
+  email text not null unique check (char_length(email) <= 254),
+  idea text check (char_length(idea) <= 200),
+  source text,
+  created_at timestamptz not null default now()
+);
+alter table public.waitlist enable row level security;
+grant insert on public.waitlist to service_role;
+```
 
-To learn more about Next.js, take a look at the following resources:
+2. Copy `.env.example` to `.env.local` and set `SUPABASE_URL` (Project Settings → Data API) and `SUPABASE_SECRET_KEY` (Project Settings → API Keys: a `sb_secret_…` key, or the legacy `service_role` key). Add the same two variables in Vercel.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+RLS is on and has no policies, so the public/anon key can't read or write the table. Emails are saved in lowercase, and a repeat signup is silently ignored.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Brand tokens
 
-## Deploy on Vercel
+Colors live as CSS variables in `src/app/globals.css` and are exposed as Tailwind colors (`ink`, `paper`, `accent`, …).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Deploy
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Import the repo in Vercel and set the two Supabase env vars.
