@@ -12,9 +12,32 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const title = "Makevia — From Idea to Product";
+const title = "Makevia — Find Manufacturers & Suppliers in India for Your Product";
 const description =
-  "Turn your product idea into reality with Makevia. Discover the right manufacturers, suppliers and services to bring your product to life.";
+  "Have a product idea? Makevia helps Indian founders find verified manufacturers, private label and contract manufacturing partners, packaging, testing and logistics services.";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://makevia.in/#organization",
+      name: "Makevia",
+      url: "https://makevia.in",
+      logo: "https://makevia.in/icon.svg",
+      description,
+      areaServed: "IN",
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://makevia.in/#website",
+      name: "Makevia",
+      url: "https://makevia.in",
+      inLanguage: "en-IN",
+      publisher: { "@id": "https://makevia.in/#organization" },
+    },
+  ],
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://makevia.in"),
@@ -48,6 +71,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} antialiased`}
     >
       <body className="min-h-dvh font-sans">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
+        />
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-lg focus:bg-ink focus:px-4 focus:py-2 focus:text-paper"

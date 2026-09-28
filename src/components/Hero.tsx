@@ -110,7 +110,7 @@ export function Hero() {
             className="animate-rise mt-7 max-w-xl text-lg leading-relaxed text-muted text-pretty sm:text-xl"
             style={{ animationDelay: "160ms" }}
           >
-            Have a product idea but don&rsquo;t know where to start? Makevia will help you discover the right manufacturers, suppliers, and services to turn your idea into a real product.
+            Have a product idea but don&rsquo;t know where to start? Makevia will help you find verified manufacturers, suppliers, and packaging, testing and logistics services in India to turn your idea into a real product.
           </p>
           <div
             className="animate-rise mt-10 flex flex-col gap-3 sm:flex-row sm:items-center"
