@@ -2,12 +2,14 @@
   "name": "makevia",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "node --test src/lib/*.test.ts"
+    "test": "node --test src/lib/*.test.ts",
+    "import:mca": "node --env-file=.env.local scripts/import-mca.ts"
   },
   "dependencies": {
     "@google/genai": "^2.24.0",

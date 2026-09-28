@@ -32,6 +32,9 @@ create table if not exists public.providers (
   created_at timestamptz not null default now()
 );
 create index if not exists providers_published_service_idx on public.providers (service) where published;
+alter table public.providers add column if not exists cin text unique;
+alter table public.providers add column if not exists address text;
+alter table public.providers add column if not exists source text not null default 'manual';
 
 create table if not exists public.match_requests (
   id bigint generated always as identity primary key,
@@ -48,5 +51,5 @@ alter table public.match_requests enable row level security;
 
 grant insert on public.waitlist to service_role;
 grant select, insert on public.ideas to service_role;
-grant select on public.providers to service_role;
+grant select, insert on public.providers to service_role;
 grant insert on public.match_requests to service_role;
