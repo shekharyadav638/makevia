@@ -45,6 +45,7 @@ export const metadata: Metadata = {
   description,
   applicationName: "Makevia",
   alternates: { canonical: "/" },
+  robots: process.env.VERCEL_ENV === "production" ? undefined : { index: false, follow: false },
   openGraph: {
     type: "website",
     url: "/",
